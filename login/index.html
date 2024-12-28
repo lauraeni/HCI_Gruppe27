@@ -1,0 +1,50 @@
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Login</title>
+</head>
+<body>
+    <div class="container">
+        <div class="left-container">
+            <div class="drop-down">
+                <div class="input-group">
+                    <label for="course">Wähle deinen Kurs</label>
+                    <select id="course" name="course" required>
+                        <option value="">-- Bitte wählen --</option>
+                        <option value="Option 1">Option 1</option>
+                        <option value="Option 2">Option 2</option>
+                        <option value="Option 3">Option 3</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="button-container">
+                <button id="studentButton" class="toggle-button active" onclick="toggleActive('studentButton', 'tutorButton')">Student</button>
+                <button id="tutorButton" class="toggle-button" onclick="toggleActive('tutorButton', 'studentButton')">Tutor</button>
+            </div>
+        </div>
+        <div class="login-container">
+            <form id="loginForm">
+                <h2>Login</h2>
+                <div class="input-group">
+                    <label for="username">Benutzername</label>
+                    <input type="text" id="username" name="username">
+                </div>
+                <div class="input-group">
+                    <label for="password">Passwort</label>
+                    <input type="password" id="password" name="password">
+                </div>
+                <button type="submit">Einloggen</button>
+                <p id="errorMessage" class="message"></p>
+            </form>            
+
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
