@@ -1,0 +1,75 @@
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Benutzer Avatar</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="left-container">
+            <div class="button-list">
+                <h2> Deine Kurse </h2>
+                <div class="item">
+                    <button class="toggle-button"> Kurs 1 </button>
+                    <div class="info-text">
+                        <p> Hier sind die Details zu Kurs 1. Dies ist der ausgeklappte Inhalt. </p>
+                    </div>
+                </div>
+        
+                <div class="item">
+                    <button class="toggle-button"> Kurs 2 </button>
+                    <div class="info-text">
+                        <p> Hier sind die Details zu Kurs 2. Dies ist der ausgeklappte Inhalt. </p>
+                    </div>
+                </div>
+        
+                <div class="item">
+                    <button class="toggle-button"> Kurs 3 </button>
+                    <div class="info-text">
+                        <p> Hier sind die Details zu Kurs 3. Dies ist der ausgeklappte Inhalt. </p>
+                    </div>
+                </div>
+            </div>
+
+            <form class="password-change-form" id="passwordChangeForm">
+                <h2>Passwort ändern</h2>
+                <label for="current-password" >Aktuelles Passwort:</label>
+                <input type="password" id="current-password" name="current-password" required>
+        
+                <label for="new-password">Neues Passwort:</label>
+                <input type="password" id="new-password" name="new-password" required>
+        
+                <label for="confirm-password">Neues Passwort bestätigen:</label>
+                <input type="password" id="confirm-password" name="confirm-password" required>
+        
+                <button type="submit">Passwort ändern</button>
+            </form>
+            
+        </div>
+        
+        <div class="avatar-container">
+            <img src="defaultAvatar.jpg" alt="Benutzer Avatar" class="avatar" id="profilePicture">
+            <input type="file" id="fileInput" accept="image/*">
+            <div class="username">Max Mustermann</div>
+            <div class="dropdown">
+                <label for="courseSelect">Wähle einen Kurs:</label>
+                <select id="courseSelect">
+                    <option value="0">Wählen Sie einen Kurs</option>
+                    <option value="60">Kurs 1: 60% abgeschlossen</option>
+                    <option value="80">Kurs 2: 80% abgeschlossen</option>
+                    <option value="40">Kurs 3: 40% abgeschlossen</option>
+                </select>
+            </div>
+            <div class="points">Punkte: <span id="points">1200</span></div>
+            <div> Fortschritt für den Kurs: </div>
+            <div class="progress-bar">
+                <div class="progress" id="progress" style="width: 60%;"></div>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

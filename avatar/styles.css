@@ -1,0 +1,164 @@
+
+.container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.avatar-container {
+    margin: 0 auto;
+    text-align: center;
+    padding: 20px;
+    width: 60vw;
+    display: flex;
+    justify-content: center; /* Horizontal zentrieren */
+    align-items: center; /* Vertikal zentrieren */
+    height: 100vh;
+    flex-direction: column; 
+}
+
+.left-container {
+    background-color: purple;
+    width: 40vw;
+    height: 100vh;
+    bottom: 0;
+    left: 0;
+    display: flex;
+}
+
+.general-information {
+    padding: 30px;
+    color: white;
+    font-size: large;
+    margin: 10px;
+}
+
+.password-change-form {
+    position: absolute;
+    margin: 10px;
+    max-width: 400px;
+    padding: 20px;
+    bottom: 0;
+    left: 0;
+    margin-left: 100px;
+    width: 40vh;
+    height: 50vh;
+    color: white;
+}
+
+.password-change-form h2 {
+    text-align: center;
+    color: white;
+}
+
+.password-change-form input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.password-change-form button {
+    width: 100%;
+    padding: 10px;
+    color: #fff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.password-change-form button:hover {
+    background-color: #0056b3;
+}
+
+.right-container {
+    background-color: blue;
+    height: 100vw;
+    width: 60vw;
+    top: 0;
+    right: 0;
+    display: flex;
+}
+
+.avatar {
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    margin-bottom: 10px;
+    border: 2px solid #007BFF;
+    object-fit: cover;
+}
+
+#fileInput {
+    margin-bottom: 10px;
+}
+
+.username, .points, .progress-bar, .badge {
+    font-size: large;
+    margin-bottom: 5px;
+}
+
+.progress-bar {
+    background-color: #f3f3f3;
+    border-radius: 5px;
+    overflow: hidden;
+    height: 20px;
+    width: 100%;
+    margin: 10px 0;
+}
+
+.dropdown {
+    margin: 10px;
+}
+
+.progress {
+    background-color: #007BFF;
+    height: 100%;
+}
+
+.button-list {
+    top: 0;
+    left: 0;
+    position: absolute;
+    margin-top: 50px;
+    margin-left: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    max-width: 600px;
+    color: white;
+}
+
+.item {
+    margin-bottom: 10px;
+}
+
+.toggle-button {
+    width: 500px;
+    height: 50px;
+    padding: 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+    outline: none;
+}
+
+.toggle-button:hover {
+    background-color: #0056b3;
+}
+
+.info-text {
+    display: none;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    margin-top: 5px;
+    color: black;
+    text-align: center;
+}
