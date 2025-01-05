@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Assignment-Tool</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f9;
+      color: #333;
+    }
+    header {
+      background-color: #6200ea;
+      color: white;
+      padding: 20px 0;
+      text-align: center;
+    }
+    main {
+      padding: 20px;
+      max-width: 800px;
+      margin: auto;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+    table th, table td {
+      border: 1px solid #ddd;
+      padding: 10px;
+      text-align: left;
+    }
+    table th {
+      background-color: #6200ea;
+      color: white;
+    }
+    
+    .status-not-started {
+      color: white;
+      background-color: grey;
+    }
+    .status-in-progress {
+      color: white;
+      background-color: blue;
+    }
+    .status-completed {
+      color: white;
+      background-color: green;
+    }
+    select.status-select {
+      border: none;
+      padding: 5px;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Assignment Nr: %d Modul: %s</h1>
+  </header>
+  <main>
+  
+    <div class="filter-container">
+      <label for="statusFilter">Status filtern: </label>
+      <select id="statusFilter">
+        <option value="Alle">Alle</option>
+        <option value="Nicht gestartet">Nicht gestartet</option>
+        <option value="Bearbeitung">Bearbeitung</option>
+        <option value="Fertig">Fertig</option>
+      </select>
+    </div>
+    
+    <div class="points-container">
+      <table id="pointsTable">
+        <thead>
+          <tr>
+            <th>Student</th>
+            <th>Status</th>
+            <th>Abgabe</th>
+            <th>Korrektion</th>
+            <th id="points">Erreichte Punkte</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody">
+          <!-- Dynamisch durch JavaScript gefüllt -->
+        </tbody>
+      </table>
+    </div>
+  </main>
+  <script>
+    const assignment_info = { number: "1", modul: "Human Computer Interaction", maxPoints: "20" };
+    const assignments = [
+      { name: "Peter Hans", abgabe: "https://www.ecom-ex.com/fileadmin/_migrated/news_uploads/beispiel_07.pdf", korrektion: "https://www.ecom-ex.com/fileadmin/_migrated/news_uploads/beispiel_07.pdf", achievedPoints: 8 },
+      { name: "Alice", abgabe: "https://www.ecom-ex.com/fileadmin/_migrated/news_uploads/beispiel_07.pdf", korrektion: null, achievedPoints: 4 },
+      { name: "Bob", abgabe: null, korrektion: null, achievedPoints: null },
+    ];
+
+    // Header dynamisch aktualisieren
+    document.querySelector("header h1").textContent = 
+      `Assignment Nr: ${assignment_info.number} Modul: ${assignment_info.modul}`;
+          
+    document.querySelector("#points").textContent = 
+      `Erreichte Punkte von: ${assignment_info.maxPoints}`;
+      
+    const statuses = Array(assignments.length).fill("Nicht gestartet"); // Standardstatus für alle Einträge
+    
+    function addRows(filterStatus = "Alle") {
+      const tbody = document.getElementById('tableBody');
+      assignments.forEach((assignment,index) => {
+        if (filterStatus !== "Alle" && statuses[index] !== filterStatus) return;
+        const row = document.createElement("tr");
+
+        // Name
+        const nameCell = document.createElement("td");
+        nameCell.textContent = assignment.name;
+
+        // Erreichte Punkte (mit Eingabefeld)
+        const achievedPointsCell = document.createElement("td");
+        const pointsInput = document.createElement("input");
+        pointsInput.type = "number";
+        pointsInput.value = assignment.achievedPoints ?? ""; // Voreinstellung, falls null
+        pointsInput.min = 0;
+        pointsInput.max = assignment_info.maxPoints; // Maximalwert aus den globalen Daten
+
+        // Event-Listener für Änderungen
+        pointsInput.addEventListener("change", () => {
+          const newPoints = parseInt(pointsInput.value, 10);
+
+          if (isNaN(newPoints) || newPoints < 0 || newPoints > assignment_info.maxPoints) {
+            alert(`Ungültige Punktzahl! Bitte geben Sie eine Zahl zwischen 0 und ${assignment_info.maxPoints} ein.`);
+            pointsInput.value = assignment.achievedPoints ?? ""; // Rücksetzen auf den vorherigen Wert
+          } else {
+            assignment.achievedPoints = newPoints; // Aktualisiert die Punktzahl im Array
+            alert(`Punkte aktualisiert auf ${newPoints}.`);
+          }
+        });
+        
+        achievedPointsCell.appendChild(pointsInput);
+
+        // Aktion
+        const actionCell = document.createElement("td");
+        const uploadButton = document.createElement("button");
+        uploadButton.textContent = 'PDF hochladen';
+        uploadButton.addEventListener("click", () => {
+            const fileInput = document.createElement("input");
+            fileInput.type = "file";
+            fileInput.accept = "application/pdf";
+            fileInput.click();
+
+            fileInput.addEventListener("change", () => {
+              if (fileInput.files.length > 0) {
+                const file = fileInput.files[0];
+                const fileURL = URL.createObjectURL(file); // Temporäre URL für die hochgeladene Datei
+                assignments[index].korrektion = fileURL; // Überschreibt das `korrektion` Feld
+
+                alert(`Korrektur-Datei "${file.name}" wurde hochgeladen und gespeichert.`);
+                updateTable(filterStatus); // Tabelle neu rendern, um die Änderungen anzuzeigen
+              }
+            });
+          });
+                
+
+          // Status (Dropdown-Menü)
+          const statusCell = document.createElement("td");
+          const statusSelect = document.createElement("select");
+          statusSelect.className = "status-select";
+
+          const statusOptions = [
+            { value: "Nicht gestartet", class: "status-not-started" },
+            { value: "Bearbeitung", class: "status-in-progress" },
+            { value: "Fertig", class: "status-completed" },
+          ];
+
+          statusOptions.forEach((statusOption) => {
+            const option = document.createElement("option");
+            option.value = statusOption.value;
+            option.textContent = statusOption.value;
+            if (statuses[index] === statusOption.value) {
+              option.selected = true;
+              statusSelect.className = `status-select ${statusOption.class}`;
+            }
+            statusSelect.appendChild(option);
+          });
+
+          statusSelect.addEventListener("change", () => {
+            statuses[index] = statusSelect.value;
+            const selectedClass = statusOptions.find((s) => s.value === statusSelect.value).class;
+            statusSelect.className = `status-select ${selectedClass}`;
+            alert(`Status geändert zu "${statusSelect.value}".`);
+            updateTable(filterStatus); // Tabelle aktualisieren, falls Filter gesetzt ist
+          });
+
+          statusCell.appendChild(statusSelect);
+          
+        // Falls Korrektion vorhanden ist, Download-Link hinzufügen
+        if (assignment.korrektion) {
+          const downloadLink = document.createElement("a");
+          downloadLink.href = assignment.korrektion;
+          downloadLink.textContent = "Korrektur öffnen";
+          downloadLink.style.marginRight = "30px"; // Abstand zum Button
+          downloadLink.setAttribute("target", "_blank"); // Neues Fenster/Tab öffnen
+          downloadLink.setAttribute("rel", "noopener noreferrer"); // Sicherheitsattribute
+          actionCell.appendChild(downloadLink);
+        }
+        actionCell.appendChild(uploadButton);
+        const abgabeCell = document.createElement("td");
+        if (assignment.abgabe) {
+          const downloadLink = document.createElement("a");
+          downloadLink.href = assignment.abgabe;
+          downloadLink.textContent = "Abgabe öffnen";
+          downloadLink.setAttribute("target", "_blank"); // Neues Fenster/Tab öffnen
+          downloadLink.setAttribute("rel", "noopener noreferrer"); // Sicherheitsattribute
+          abgabeCell.appendChild(downloadLink);
+        }
+
+        // Zeile zusammenbauen
+        row.appendChild(nameCell);
+        row.appendChild(statusCell);
+        row.appendChild(abgabeCell);
+        row.appendChild(actionCell);
+        row.appendChild(achievedPointsCell);
+
+        // Zeile hinzufügen
+        tbody.appendChild(row);
+      });
+    }
+    // Tabelle aktualisieren
+    function updateTable(selectedStatus) {
+      const tbody = document.getElementById("tableBody");
+      tbody.innerHTML = ""; // Alte Inhalte entfernen
+      addRows(selectedStatus); // Neue Inhalte einfügen
+    }
+    // Tabellenzeilen hinzufügen
+    addRows();
+    
+    // Filter-Event hinzufügen
+    const statusFilter = document.getElementById("statusFilter");
+    statusFilter.addEventListener("change", () => {
+      const selectedStatus = statusFilter.value;
+      updateTable(selectedStatus);
+    });
+  </script>
+</body>
+</html>
+
+  
