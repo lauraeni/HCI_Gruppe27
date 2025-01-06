@@ -540,7 +540,15 @@ document.querySelectorAll("[id^='downloadButton']").forEach(button => {
             // Alte Assignments entfernen
             assignmentsList.innerHTML = "";
 
-            
+                // Neue Assignments hinzufügen
+                courseAssignments[course].forEach((assignment, index) => {
+                const listItem = document.createElement("li");
+                const link = document.createElement("a");
+                //link.href = `/Homepage/Homepage_Student.html?assignment=${index + 1}`;
+                link.textContent = assignment;
+                listItem.appendChild(link);
+                assignmentsList.appendChild(listItem);
+            });
 
            
 
