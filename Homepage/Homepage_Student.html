@@ -28,7 +28,7 @@
             display: flex;
             align-items: center;
             gap: 20px;
-            flex-grow=1;
+            flex-grow: 1;
         }
 
         /* Dropdown Menü */
@@ -114,6 +114,10 @@
             padding: 0;
         }
 
+        .assignments ul li {
+            margin-bottom: 10px; /* Erhöhter vertikaler Abstand zwischen den Assignments */
+        }
+
         .assignments ul li a {
             color: #6200ee;
             text-decoration: none;
@@ -123,6 +127,24 @@
         .assignments ul li a:hover {
             text-decoration: underline;
         }
+
+        .assignments .group-chat-button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+            margin-top: 15px;
+            display: block;
+        }
+
+        .assignments .group-chat-button:hover {
+            background-color: #0056b3;
+        }
+
 
         /* Upload Section */
         .upload-section {
@@ -238,37 +260,64 @@
         body.dark-mode a {
             color: #bb86fc;
         }
+
+        /* Punkteübersicht Button*/
+        .points {
+            margin: 10px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .points-button {
+            background-color: #4caf50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        .points-button:hover {
+            background-color: #45a049;
+        }
+
     </style>
 </head>
 <body>
     <!-- Header -->
+
     <header>
         <div class="header-container">
             <div class="dropdown">
-                <button class="dropbtn">Kurs auswählen</button>
+                <button class="dropbtn" id="courseButton">Kurs wählen</button>
                 <div class="dropdown-content">
-                    <a href="#kurs1">Grundlagen der Mensch-Computer-Interaktion</a>
-                    <a href="#kurs2">Programmieren 1</a>
-                    <a href="#kurs3">Theoretische Informatik</a>
-                    <a href="#kurs4">Grundlagen Digitaler Systeme</a>
+                    <a href="#" data-course="Grundlagen der Mensch-Computer-Interaktion">Grundlagen der Mensch-Computer-Interaktion</a>
+                    <a href="#" data-course="Programmieren 1">Programmieren 1</a>
+                    <a href="#" data-course="Theoretische Informatik">Theoretische Informatik</a>
+                    <a href="#" data-course="Grundlagen Digitaler Systeme">Grundlagen Digitaler Systeme</a>
                 </div>
             </div>
-            <button class="logout-button">Logout</button>
+            <button class="logout-button" id="logoutButton">Logout</button>
         </div>
         <!-- Einstellungs-Button -->
         <div class="settings">
             <button id="toggleTheme">Dark Mode</button>
         </div>
+        <!-- Punkteübersicht-Button -->
+        <div class="points" style="display: none;">
+            <button class="points-button" id="pointsButton">Punkteübersicht</button>
+        </div>        
+        
     </header>
 
     <div class="container">
         <!-- Assignments -->
-        <div class="assignments">
+        <div class="assignments" id="assignmentsSection">
             <h2>Assignments</h2>
-            <ul>
-                <li><a href="#assignment1">Assignment 1</a></li>
-                <li><a href="#assignment2">Assignment 2</a></li>
-                <li><a href="#assignment3">Assignment 3</a></li>
+            <ul id="assignmentsList">
+                <!-- Assignments werden dynamisch hinzugefügt -->
             </ul>
         </div>
 
@@ -293,12 +342,109 @@
     </div>
 
     <script>
+        let selectedCourse = null;
+        const pointsButton = document.querySelector('.points');
+
+        // Kursauswahl
+        const courseButton = document.getElementById("courseButton");
+        const courseLinks = document.querySelectorAll(".dropdown-content a");
+        const assignmentsSection = document.getElementById("assignmentsSection");
+        const assignmentsList = document.getElementById("assignmentsList");
+
+        courseLinks.forEach(link => {
+            link.addEventListener("click", function(event) {
+                event.preventDefault();
+                selectedCourse = this.dataset.course;
+
+                // Button-Label ändern
+                courseButton.textContent = this.textContent;
+
+                // Assignments für den gewählten Kurs anzeigen
+                updateAssignments(selectedCourse);
+
+                // Punkteübersicht-Button anzeigen
+                pointsButton.style.display = 'block';
+            });
+        });
+
+
+        // Punkteübersicht-Button-Funktionalität
+        document.getElementById("pointsButton").addEventListener("click", function() {
+            if (selectedCourse) {
+                // Weiterleitung zur Punkteübersicht mit dem ausgewählten Kurs als Parameter
+                window.location.href = `../score overview/score.html?course=${encodeURIComponent(selectedCourse)}`;
+            } else {
+                alert("Bitte wählen Sie zuerst einen Kurs aus.");
+            }
+        });
+
+        // Dummy-Daten für Assignments
+        const courseAssignments = {
+            "Grundlagen der Mensch-Computer-Interaktion": ["Assignment 1", "Assignment 2", "Assignment 3"],
+            "Programmieren 1":  ["Assignment 1", "Assignment 2"],
+            "Theoretische Informatik":  ["Assignment 1", "Assignment 2", "Assignment 3", "Assignment 4"],
+            "Grundlagen Digitaler Systeme":  ["Assignment 1", "Assignment 2", "Assignment 3", "Assignment 4", "Assignment 5"]
+        };
+
+        // Kurse mit Gruppenchat
+        const coursesWithGroupChat = ["Grundlagen der Mensch-Computer-Interaktion", "Programmieren 1"];
+
+        // Assignments aktualisieren
+        function updateAssignments(course) {
+            if (!course) return;
+
+            // Alte Assignments entfernen
+            assignmentsList.innerHTML = "";
+
+            // Neue Assignments hinzufügen
+            courseAssignments[course].forEach((assignment, index) => {
+                const listItem = document.createElement("li");
+                const link = document.createElement("a");
+                link.href = `../tutor_score_overview/tutor_overview.html?course=${course}&assignment=${index + 1}`;
+                link.textContent = assignment;
+                listItem.appendChild(link);
+                assignmentsList.appendChild(listItem);
+            });
+
+            // Gruppenchat-Button hinzufügen, falls verfügbar
+            // In der updateAssignments Funktion:
+            if (coursesWithGroupChat.includes(course)) {
+                const chatButton = document.createElement("button");
+                chatButton.textContent = "Zum Gruppenchat";
+                chatButton.classList.add("group-chat-button");
+                chatButton.addEventListener("click", () => {
+                    // Logik für Gruppenchat-Weiterleitung
+                    window.location.href = `../Groupchat/Groupchat.html?course=${encodeURIComponent(course)}`;
+                });
+                assignmentsList.appendChild(chatButton);
+            }
+
+
+            // Assignments-Section sichtbar machen
+            assignmentsSection.style.display = "block";
+        }
+
         // Dark Mode Toggle
         const toggleButton = document.getElementById('toggleTheme');
         toggleButton.addEventListener('click', () => {
             document.body.classList.toggle('dark-mode');
             toggleButton.textContent = document.body.classList.contains('dark-mode') ? 'Light Mode' : 'Dark Mode';
         });
+        // Logout-Button auswählen
+        const logoutButton = document.getElementById("logoutButton");
+
+        // Event Listener hinzufügen
+        logoutButton.addEventListener("click", function() {
+            // Weiterleitung zur Login-Seite
+            window.location.href = "../login/index.html"; // Passen Sie den Pfad entsprechend Ihrer Verzeichnisstruktur an
+        });
+
+        //Punkteübersicht auswählen
+        pointsButton.addEventListener("click", function() {
+            // Weiterleitung zur Punkteübersicht
+            window.location.href = "../score overview/score.html"; // Pfad zur Punkteübersicht anpassen
+        });
+
     </script>
 </body>
 </html>

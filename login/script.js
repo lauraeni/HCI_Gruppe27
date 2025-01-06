@@ -5,6 +5,7 @@ document.getElementById('loginForm').addEventListener('submit', function(event) 
     const password = document.getElementById('password').value;
     const errorMessage = document.getElementById('errorMessage');
     const courseSelect = document.getElementById('course');
+    const selectedButton = getCookie('selectedButton');
     
     errorMessage.textContent = '';
     errorMessage.style.color = 'red';
@@ -14,7 +15,20 @@ document.getElementById('loginForm').addEventListener('submit', function(event) 
         return;
     }
 
-
+    if (username && password) {
+        // Weiterleitung zur Homepage
+        if (selectedButton === 'studentButton') {
+            window.location.href = "../Homepage/Homepage_Student.html";
+        } else if (selectedButton === 'tutorButton') {
+            window.location.href = "../Homepage/Homepage_Tutor.html";
+        } else {
+            // Fallback, falls kein Button ausgewählt wurde
+            errorMessage.textContent = "Bitte wählen Sie Student oder Tutor aus.";
+        }
+    } else {
+        // Fehlermeldung anzeigen
+        document.getElementById("errorMessage").textContent = "Benutzername oder Passwort ist falsch!";
+    }
 /*
     if (username === 'benutzer' && password === 'passwort') {
         alert('Login erfolgreich!');

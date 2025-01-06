@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tutoren-Homepage</title>
+    <style>
+        /* Allgemeine Stile */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9fb;
+            color: #333;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: #6200ea;
+            color: white;
+        }
+
+        .header-container {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .logout-button {
+            background-color: #e53935;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .logout-button:hover {
+            background-color: #c62828;
+        }
+
+        /* Dropdown Menü */
+        .dropdown {
+            position: relative;
+        }
+
+        .dropbtn {
+            background-color: white;
+            color: #6200ea;
+            padding: 10px 15px;
+            font-size: 14px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: white;
+            min-width: 200px;
+            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+            border-radius: 5px;
+        }
+
+        .dropdown-content a {
+            color: #333;
+            padding: 10px 15px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #f1f1f1;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        /* Container */
+        .container {
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            gap: 20px;
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        .assignments {
+            display: none; /* Anfangs unsichtbar */
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .assignments h2 {
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+
+        .assignments ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .assignments ul li {
+            margin-bottom: 10px;
+        }
+
+        .assignments ul li a {
+            color: #6200ee;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .assignments ul li a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-container">
+            <div class="dropdown">
+                <button class="dropbtn" id="courseButton">Kurs wählen</button>
+                <div class="dropdown-content">
+                    <a href="#" data-course="Grundlagen der Mensch-Computer-Interaktion">Grundlagen der Mensch-Computer-Interaktion</a>
+                    <a href="#" data-course="Programmieren 1">Programmieren 1</a>
+                    <a href="#" data-course="Theoretische Informatik">Theoretische Informatik</a>
+                    <a href="#" data-course="Grundlagen Digitaler Systeme">Grundlagen Digitaler Systeme</a>
+                </div>
+            </div>
+            <button class="logout-button" id="logoutButton">Logout</button>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Assignments -->
+        <div class="assignments" id="assignmentsSection">
+            <h2>Assignments</h2>
+            <ul id="assignmentsList">
+                <!-- Assignments werden dynamisch hinzugefügt -->
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        let selectedCourse = null;
+
+        // Kursauswahl
+        const courseButton = document.getElementById("courseButton");
+        const courseLinks = document.querySelectorAll(".dropdown-content a");
+        const assignmentsSection = document.getElementById("assignmentsSection");
+        const assignmentsList = document.getElementById("assignmentsList");
+
+        courseLinks.forEach(link => {
+            link.addEventListener("click", function(event) {
+                event.preventDefault();
+                selectedCourse = this.dataset.course;
+
+                // Button-Label ändern
+                courseButton.textContent = this.textContent;
+
+                // Assignments für den gewählten Kurs anzeigen
+                updateAssignments(selectedCourse);
+            });
+        });
+
+        // Dummy-Daten für Assignments
+        const courseAssignments = {
+            "Grundlagen der Mensch-Computer-Interaktion": ["Assignment 1", "Assignment 2", "Assignment 3"],
+            "Programmieren 1":  ["Assignment 1", "Assignment 2"],
+            "Theoretische Informatik":  ["Assignment 1", "Assignment 2", "Assignment 3", "Assignment 4"],
+            "Grundlagen Digitaler Systeme":  ["Assignment 1", "Assignment 2", "Assignment 3", "Assignment 4", "Assignment 5"]
+        };
+
+        // Assignments aktualisieren
+        function updateAssignments(course) {
+            if (!course) return;
+
+            // Alte Assignments entfernen
+            assignmentsList.innerHTML = "";
+
+            // Neue Assignments hinzufügen
+            courseAssignments[course].forEach((assignment, index) => {
+                const listItem = document.createElement("li");
+                const link = document.createElement("a");
+                link.href = `../tutor_score_overview/tutor_overview.html?course=${course}&assignment=${index + 1}`;
+                link.textContent = assignment;
+                listItem.appendChild(link);
+                assignmentsList.appendChild(listItem);
+            });
+
+            // Assignments-Section sichtbar machen
+            assignmentsSection.style.display = "block";
+        }
+
+        // Logout-Button überwachen
+        const logoutButton = document.getElementById("logoutButton");
+        logoutButton.addEventListener("click", function() {
+            window.location.href = "../login/index.html";
+        });
+    </script>
+</body>
+</html>
