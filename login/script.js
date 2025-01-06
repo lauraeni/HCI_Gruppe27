@@ -22,8 +22,7 @@ document.getElementById('loginForm').addEventListener('submit', function(event) 
         } else if (selectedButton === 'tutorButton') {
             window.location.href = "../Homepage/Homepage_Tutor.html";
         } else {
-            // Fallback, falls kein Button ausgewählt wurde
-            errorMessage.textContent = "Bitte wählen Sie Student oder Tutor aus.";
+            window.location.href = "../Homepage/Homepage_Student.html";
         }
     } else {
         // Fehlermeldung anzeigen
