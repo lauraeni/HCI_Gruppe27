@@ -317,15 +317,29 @@
         <div class="assignments" id="assignmentsSection">
             <h2>Assignments</h2>
             <ul id="assignmentsList">
-                <!-- Assignments werden dynamisch hinzugefügt -->
+                <li>
+                    <a href="#" data-assignment="1">Assignment 1</a>
+                    <span id="status1">❌</span>
+                    <button id="downloadButton1" style="display:none;">Herunterladen</button>
+                </li>
+                <li>
+                    <a href="#" data-assignment="2">Assignment 2</a>
+                    <span id="status2">❌</span>
+                    <button id="downloadButton2" style="display:none;">Herunterladen</button>
+                </li>
+                <li>
+                    <a href="#" data-assignment="3">Assignment 3</a>
+                    <span id="status3">❌</span>
+                    <button id="downloadButton3" style="display:none;">Herunterladen</button>
+                </li>
             </ul>
         </div>
 
         <!-- Upload Section -->
-        <div class="upload-section">
-            <h1>Assignment Hochladen</h1>
-            <form action="#" method="POST" enctype="multipart/form-data">
-                <input type="file" name="assignment" required>
+        <div class="upload-section" id="uploadSection">
+            <h1 id="uploadTitle">Assignment Hochladen</h1>
+            <form action="#" method="POST" enctype="multipart/form-data" id="uploadForm">
+                <input type="file" name="assignment" id="uploadInput" required>
                 <button type="submit">Hochladen</button>
             </form>
         </div>
@@ -389,6 +403,106 @@
         // Kurse mit Gruppenchat
         const coursesWithGroupChat = ["Grundlagen der Mensch-Computer-Interaktion", "Programmieren 1"];
 
+        // Event Listener für das Anklicken von Assignments
+assignmentsList.addEventListener("click", function(event) {
+    const clickedElement = event.target;
+    
+    // Überprüfen, ob auf einen Assignment-Link geklickt wurde
+    if (clickedElement.tagName === "A" && clickedElement.dataset.assignment) {
+        event.preventDefault();
+        const assignmentId = clickedElement.dataset.assignment;
+
+        // Upload-Bereich anzeigen
+        const uploadSection = document.getElementById("uploadSection");
+        uploadSection.style.display = "block";
+
+        // Titel des Upload-Bereichs ändern
+        const uploadTitle = document.getElementById("uploadTitle");
+        uploadTitle.textContent = `${clickedElement.textContent} Hochladen`;
+
+        // Event Listener für das Hochladen-Formular
+        const uploadForm = document.getElementById("uploadForm");
+        uploadForm.onsubmit = function(e) {
+            e.preventDefault();
+
+            // Dateiauswahl überprüfen
+            const uploadInput = document.getElementById("uploadInput");
+            const file = uploadInput.files[0];
+            if (!file) {
+                alert("Bitte wählen Sie eine Datei aus, bevor Sie hochladen.");
+                return;
+            }
+
+            // Datei mit dem Assignment verbinden
+            uploadedFiles[assignmentId] = file;
+
+            // Markierung und Download-Button aktualisieren
+            document.getElementById(`status${assignmentId}`).textContent = "✔️";
+            const downloadButton = document.getElementById(`downloadButton${assignmentId}`);
+            downloadButton.style.display = "inline-block";
+
+            alert(`Datei für ${clickedElement.textContent} erfolgreich hochgeladen.`);
+            uploadForm.reset(); // Formular zurücksetzen
+        };
+    }
+});
+
+        // Event Listener hinzufügen
+        logoutButton.addEventListener("click", function() {
+            // Weiterleitung zur Login-Seite
+            window.location.href = "../login/index.html"; // Passen Sie den Pfad entsprechend Ihrer Verzeichnisstruktur an
+        });
+
+        let uploadedFiles = {};
+
+         // Assignment-Klick-Event
+         document.querySelectorAll("#assignmentsList a").forEach(link => {
+            link.addEventListener("click", function(event) {
+                event.preventDefault();
+                const assignmentId = this.dataset.assignment;
+                
+                // Upload-Bereich anzeigen
+                const uploadSection = document.getElementById("uploadSection");
+                uploadSection.style.display = "block";
+                
+                // Titel des Upload-Bereichs ändern
+                document.getElementById("uploadTitle").textContent = `${this.textContent} Hochladen`;
+
+                // Formulardaten zurücksetzen
+                const uploadForm = document.getElementById("uploadForm");
+                uploadForm.reset();
+
+                // Event Listener für das Hochladen-Formular
+                uploadForm.addEventListener("submit", function(e) {
+                    e.preventDefault();
+
+                    // Markierung und Download-Button aktualisieren
+                    document.getElementById(`status${assignmentId}`).textContent = "✔️";
+                    document.getElementById(`downloadButton${assignmentId}`).style.display = "inline-block";
+                });
+            });
+        });
+// Download-Button-Funktionalität
+document.querySelectorAll("[id^='downloadButton']").forEach(button => {
+            button.addEventListener("click", function() {
+                const assignmentId = button.id.match(/\d+/)[0];
+                const file = uploadedFiles[assignmentId];
+
+                if (file) {
+                    const url = window.URL.createObjectURL(file);
+                    const a = document.createElement("a");
+                    a.href = url;
+                    a.download = file.name;
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                    a.remove();
+                }
+            });
+        });
+
+
+
         // Assignments aktualisieren
         function updateAssignments(course) {
             if (!course) return;
@@ -396,15 +510,9 @@
             // Alte Assignments entfernen
             assignmentsList.innerHTML = "";
 
-            // Neue Assignments hinzufügen
-            courseAssignments[course].forEach((assignment, index) => {
-                const listItem = document.createElement("li");
-                const link = document.createElement("a");
-                //link.href = `/Homepage/Homepage_Student.html?assignment=${index + 1}`;
-                link.textContent = assignment;
-                listItem.appendChild(link);
-                assignmentsList.appendChild(listItem);
-            });
+            
+
+           
 
             // Gruppenchat-Button hinzufügen, falls verfügbar
             // In der updateAssignments Funktion:
@@ -444,6 +552,8 @@
             // Weiterleitung zur Punkteübersicht
             window.location.href = "../score overview/score.html"; // Pfad zur Punkteübersicht anpassen
         });
+
+        
 
     </script>
 </body>
