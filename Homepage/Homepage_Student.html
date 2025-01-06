@@ -272,6 +272,7 @@
             background-color: #4caf50;
             color: white;
             padding: 10px 20px;
+            margin-left: 10px;
             border: none;
             border-radius: 5px;
             cursor: pointer;
@@ -280,6 +281,27 @@
         }
 
         .points-button:hover {
+            background-color: #45a049;
+        }
+
+        .avatar {
+            display: flex;
+            justify-content: center;
+        }
+
+        .avatar-button {
+            background-color: #4caf50;
+            color: white;
+            padding: 10px 20px;
+            margin-left: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        .avatar-button:hover {
             background-color: #45a049;
         }
 
@@ -309,7 +331,10 @@
         <div class="points" style="display: none;">
             <button class="points-button" id="pointsButton">Punkteübersicht</button>
         </div>        
-        
+        <!-- Avatar-Button -->
+        <div class="Avatar">
+            <button class="avatar-button" id="avatarButton">Avatar</button>
+        </div>  
     </header>
 
     <div class="container">
@@ -376,6 +401,11 @@
             } else {
                 alert("Bitte wählen Sie zuerst einen Kurs aus.");
             }
+        });
+
+        // Avatar-Button-Funktionalität
+        document.getElementById("avatarButton").addEventListener("click", function() {
+            window.location.href = `../avatar/index.html?course=${encodeURIComponent(selectedCourse)}`;
         });
 
         // Dummy-Daten für Assignments

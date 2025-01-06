@@ -83,6 +83,27 @@
             display: block;
         }
 
+        .avatar {
+            display: flex;
+            justify-content: center;
+        }
+
+        .avatar-button {
+            background-color: #4caf50;
+            color: white;
+            padding: 10px 20px;
+            margin-left: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        .avatar-button:hover {
+            background-color: #45a049;
+        }
+
         /* Container */
         .container {
             display: flex;
@@ -141,6 +162,10 @@
             </div>
             <button class="logout-button" id="logoutButton">Logout</button>
         </div>
+        <!-- Avatar-Button -->
+        <div class="Avatar">
+            <button class="avatar-button" id="avatarButton">Avatar</button>
+        </div>  
     </header>
 
     <div class="container">
@@ -151,6 +176,7 @@
                 <!-- Assignments werden dynamisch hinzugefügt -->
             </ul>
         </div>
+        </div>        
     </div>
 
     <script>
@@ -208,6 +234,11 @@
         const logoutButton = document.getElementById("logoutButton");
         logoutButton.addEventListener("click", function() {
             window.location.href = "../login/index.html";
+        });
+
+        // Avatar-Button-Funktionalität
+        document.getElementById("avatarButton").addEventListener("click", function() {
+            window.location.href = `../avatar/index.html?course=${encodeURIComponent(selectedCourse)}`;
         });
     </script>
 </body>
