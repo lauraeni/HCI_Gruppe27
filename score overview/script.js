@@ -1,3 +1,4 @@
+
 // Beispiel-Daten für erreichte Punkte
 const assignments = [
     { name: "Abgabe 1", maxPoints: 10, achievedPoints: 8 },
@@ -23,9 +24,17 @@ function loadPointsTable() {
         const achievedPointsCell = document.createElement("td");
         achievedPointsCell.textContent = assignment.achievedPoints;
 
+        // Korrektur Button Zelle
+        const correctionCell = document.createElement("td");
+        const correctionButton = document.createElement("button");
+        correctionButton.textContent = "Download";
+        correctionButton.onclick = () => alert(`Korrektur für ${assignment.name} erfolgreich heruntergeladen.`);
+        correctionCell.appendChild(correctionButton);
+
         row.appendChild(nameCell);
         row.appendChild(maxPointsCell);
         row.appendChild(achievedPointsCell);
+        row.appendChild(correctionCell);
 
         tableBody.appendChild(row);
 

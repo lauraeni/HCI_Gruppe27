@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="de">
 <head>
@@ -161,8 +162,10 @@
             font-size: 24px;
         }
 
-        .upload-section input[type="file"] {
+        .upload-section input[type="file"],
+        .upload-section button {
             margin-bottom: 10px;
+            display: none; /* Zunächst verborgen */
         }
 
         .upload-section button {
@@ -177,6 +180,10 @@
 
         .upload-section button:hover {
             background-color: #0056b3;
+        }
+
+        .disabled {
+            display: none; /* Versteckt das Element */
         }
 
         /* Message Board */
@@ -304,7 +311,6 @@
         .avatar-button:hover {
             background-color: #45a049;
         }
-
     </style>
 </head>
 <body>
@@ -343,19 +349,7 @@
             <h2>Assignments</h2>
             <ul id="assignmentsList">
                 <li>
-                    <a href="#" data-assignment="1">Assignment 1</a>
-                    <span id="status1">❌</span>
-                    <button id="downloadButton1" style="display:none;">Herunterladen</button>
-                </li>
-                <li>
-                    <a href="#" data-assignment="2">Assignment 2</a>
-                    <span id="status2">❌</span>
-                    <button id="downloadButton2" style="display:none;">Herunterladen</button>
-                </li>
-                <li>
-                    <a href="#" data-assignment="3">Assignment 3</a>
-                    <span id="status3">❌</span>
-                    <button id="downloadButton3" style="display:none;">Herunterladen</button>
+                    Select a course!
                 </li>
             </ul>
         </div>
@@ -364,7 +358,7 @@
         <div class="upload-section" id="uploadSection">
             <h1 id="uploadTitle">Assignment Hochladen</h1>
             <form action="#" method="POST" enctype="multipart/form-data" id="uploadForm">
-                <input type="file" name="assignment" id="uploadInput" required>
+                <input type="file" name="assignment" id="uploadInput">
                 <button type="submit">Hochladen</button>
             </form>
         </div>
@@ -406,7 +400,6 @@
             });
         });
 
-
         // Punkteübersicht-Button-Funktionalität
         document.getElementById("pointsButton").addEventListener("click", function() {
             if (selectedCourse) {
@@ -433,105 +426,15 @@
         // Kurse mit Gruppenchat
         const coursesWithGroupChat = ["Grundlagen der Mensch-Computer-Interaktion", "Programmieren 1"];
 
-        // Event Listener für das Anklicken von Assignments
-assignmentsList.addEventListener("click", function(event) {
-    const clickedElement = event.target;
-    
-    // Überprüfen, ob auf einen Assignment-Link geklickt wurde
-    if (clickedElement.tagName === "A" && clickedElement.dataset.assignment) {
-        event.preventDefault();
-        const assignmentId = clickedElement.dataset.assignment;
+        let uploadedFiles = {}; // Objekt zum Speichern von hochgeladenen Dateien
 
-        // Upload-Bereich anzeigen
-        const uploadSection = document.getElementById("uploadSection");
-        uploadSection.style.display = "block";
-
-        // Titel des Upload-Bereichs ändern
-        const uploadTitle = document.getElementById("uploadTitle");
-        uploadTitle.textContent = `${clickedElement.textContent} Hochladen`;
-
-        // Event Listener für das Hochladen-Formular
-        const uploadForm = document.getElementById("uploadForm");
-        uploadForm.onsubmit = function(e) {
-            e.preventDefault();
-
-            // Dateiauswahl überprüfen
-            const uploadInput = document.getElementById("uploadInput");
-            const file = uploadInput.files[0];
-            if (!file) {
-                alert("Bitte wählen Sie eine Datei aus, bevor Sie hochladen.");
-                return;
-            }
-
-            // Datei mit dem Assignment verbinden
-            uploadedFiles[assignmentId] = file;
-
-            // Markierung und Download-Button aktualisieren
-            document.getElementById(`status${assignmentId}`).textContent = "✔️";
-            const downloadButton = document.getElementById(`downloadButton${assignmentId}`);
-            downloadButton.style.display = "inline-block";
-
-            alert(`Datei für ${clickedElement.textContent} erfolgreich hochgeladen.`);
-            uploadForm.reset(); // Formular zurücksetzen
+        // Legt fest, welche Assignments hochgeladen werden können
+        const allowedUploadAssignments = {
+            "Grundlagen der Mensch-Computer-Interaktion": [true, false, false],
+            "Programmieren 1":  [true, true],
+            "Theoretische Informatik":  [false, false, false, false],
+            "Grundlagen Digitaler Systeme":  [true, false, false, false, true]
         };
-    }
-});
-
-        // Event Listener hinzufügen
-        logoutButton.addEventListener("click", function() {
-            // Weiterleitung zur Login-Seite
-            window.location.href = "../login/index.html"; // Passen Sie den Pfad entsprechend Ihrer Verzeichnisstruktur an
-        });
-
-        let uploadedFiles = {};
-
-         // Assignment-Klick-Event
-         document.querySelectorAll("#assignmentsList a").forEach(link => {
-            link.addEventListener("click", function(event) {
-                event.preventDefault();
-                const assignmentId = this.dataset.assignment;
-                
-                // Upload-Bereich anzeigen
-                const uploadSection = document.getElementById("uploadSection");
-                uploadSection.style.display = "block";
-                
-                // Titel des Upload-Bereichs ändern
-                document.getElementById("uploadTitle").textContent = `${this.textContent} Hochladen`;
-
-                // Formulardaten zurücksetzen
-                const uploadForm = document.getElementById("uploadForm");
-                uploadForm.reset();
-
-                // Event Listener für das Hochladen-Formular
-                uploadForm.addEventListener("submit", function(e) {
-                    e.preventDefault();
-
-                    // Markierung und Download-Button aktualisieren
-                    document.getElementById(`status${assignmentId}`).textContent = "✔️";
-                    document.getElementById(`downloadButton${assignmentId}`).style.display = "inline-block";
-                });
-            });
-        });
-// Download-Button-Funktionalität
-document.querySelectorAll("[id^='downloadButton']").forEach(button => {
-            button.addEventListener("click", function() {
-                const assignmentId = button.id.match(/\d+/)[0];
-                const file = uploadedFiles[assignmentId];
-
-                if (file) {
-                    const url = window.URL.createObjectURL(file);
-                    const a = document.createElement("a");
-                    a.href = url;
-                    a.download = file.name;
-                    document.body.appendChild(a);
-                    a.click();
-                    window.URL.revokeObjectURL(url);
-                    a.remove();
-                }
-            });
-        });
-
-
 
         // Assignments aktualisieren
         function updateAssignments(course) {
@@ -540,35 +443,105 @@ document.querySelectorAll("[id^='downloadButton']").forEach(button => {
             // Alte Assignments entfernen
             assignmentsList.innerHTML = "";
 
-                // Neue Assignments hinzufügen
-                courseAssignments[course].forEach((assignment, index) => {
+            // Neue Assignments hinzufügen
+            courseAssignments[course].forEach((assignment, index) => {
                 const listItem = document.createElement("li");
+
                 const link = document.createElement("a");
-                //link.href = `/Homepage/Homepage_Student.html?assignment=${index + 1}`;
+                link.href = "#";
                 link.textContent = assignment;
+                link.dataset.assignment = index + 1; // Setze die assignment-Daten-ID
                 listItem.appendChild(link);
+
+                const statusSpan = document.createElement("span");
+                // Symbol basierend auf der Erlaubnis setzen
+                if (allowedUploadAssignments[course][index]) {
+                    statusSpan.textContent = " 🟢"; // Grünes Symbol für erlaubte Uploads
+                } else {
+                    statusSpan.textContent = " ❌"; // Rotes X für nicht erlaubte Uploads
+                }
+                statusSpan.classList.add("status-symbol");
+                statusSpan.id = `status${index + 1}`; // Gibt jedem Status ein eindeutige ID
+                listItem.appendChild(statusSpan);
+
                 assignmentsList.appendChild(listItem);
             });
 
-           
-
             // Gruppenchat-Button hinzufügen, falls verfügbar
-            // In der updateAssignments Funktion:
             if (coursesWithGroupChat.includes(course)) {
                 const chatButton = document.createElement("button");
                 chatButton.textContent = "Zum Gruppenchat";
                 chatButton.classList.add("group-chat-button");
                 chatButton.addEventListener("click", () => {
-                    // Logik für Gruppenchat-Weiterleitung
                     window.location.href = `../Groupchat/Groupchat.html?course=${encodeURIComponent(course)}`;
                 });
                 assignmentsList.appendChild(chatButton);
             }
 
-
             // Assignments-Section sichtbar machen
             assignmentsSection.style.display = "block";
         }
+
+        // Event Listener für das Anklicken von Assignments
+        assignmentsList.addEventListener("click", function(event) {
+            const clickedElement = event.target;
+            
+            // Überprüfen, ob auf einen Assignment-Link geklickt wurde
+            if (clickedElement.tagName === "A" && clickedElement.dataset.assignment) {
+                event.preventDefault();
+                const assignmentId = clickedElement.dataset.assignment - 1;
+
+                // Upload-Bereich anzeigen
+                const uploadSection = document.getElementById("uploadSection");
+                const uploadTitle = document.getElementById("uploadTitle");
+                const uploadInput = document.getElementById("uploadInput");
+                const uploadButton = uploadForm.querySelector("button");
+
+                // Überprüfen, ob das Assignment hochgeladen werden darf
+                if (allowedUploadAssignments[selectedCourse][assignmentId]) {
+                    uploadSection.style.display = "block";
+                    uploadTitle.textContent = `${clickedElement.textContent} Hochladen`;
+                    
+                    // Mach den Upload-Bereich aktiv
+                    uploadInput.disabled = false;
+                    uploadButton.disabled = false;
+                    uploadInput.style.display = "block";
+                    uploadButton.style.display = "block";
+
+                    // Event Listener für das Hochladen-Formular
+                    const uploadForm = document.getElementById("uploadForm");
+                    uploadForm.onsubmit = function(e) {
+                        e.preventDefault();
+
+                        // Dateiauswahl überprüfen
+                        const uploadInput = document.getElementById("uploadInput");
+                        const file = uploadInput.files[0];
+                        if (!file) {
+                            alert("Bitte wählen Sie eine Datei aus, bevor Sie hochladen.");
+                            return;
+                        }
+
+                        // Datei mit dem Assignment verbinden
+                        uploadedFiles[assignmentId] = file;
+
+                        // Symbol aktualisieren
+                        document.getElementById(`status${assignmentId + 1}`).textContent = "✔️";
+
+                        alert(`Datei für ${clickedElement.textContent} erfolgreich hochgeladen.`);
+                        uploadForm.reset(); // Formular zurücksetzen
+                    };
+                } else {
+                    uploadSection.style.display = "block";
+                    uploadTitle.textContent = `Die Abgabefrist für "${clickedElement.textContent}" ist abgelaufen.`;
+
+                    // Verstecke den Upload-Bereich
+                    uploadInput.disabled = true;
+                    uploadButton.disabled = true;
+                    uploadInput.style.display = "none";
+                    uploadButton.style.display = "none";
+                }
+            }
+        });
 
         // Dark Mode Toggle
         const toggleButton = document.getElementById('toggleTheme');
@@ -576,25 +549,20 @@ document.querySelectorAll("[id^='downloadButton']").forEach(button => {
             document.body.classList.toggle('dark-mode');
             toggleButton.textContent = document.body.classList.contains('dark-mode') ? 'Light Mode' : 'Dark Mode';
         });
+
         // Logout-Button auswählen
         const logoutButton = document.getElementById("logoutButton");
 
         // Event Listener hinzufügen
         logoutButton.addEventListener("click", function() {
             // Weiterleitung zur Login-Seite
-            window.location.href = "../login/index.html"; // Passen Sie den Pfad entsprechend Ihrer Verzeichnisstruktur an
+            window.location.href = "../login/index.html"; 
         });
 
-        //Punkteübersicht auswählen
+        // Punkteübersicht auswählen
         pointsButton.addEventListener("click", function() {
-            // Weiterleitung zur Punkteübersicht
-            window.location.href = "../score overview/score.html"; // Pfad zur Punkteübersicht anpassen
+            window.location.href = "../score overview/score.html"; 
         });
-
-        
-
     </script>
 </body>
 </html>
-
-
