@@ -349,14 +349,14 @@
             <h2>Assignments</h2>
             <ul id="assignmentsList">
                 <li>
-                    Select a course!
+                    Wähle oben rechts einen Kurs aus!
                 </li>
             </ul>
         </div>
 
         <!-- Upload Section -->
         <div class="upload-section" id="uploadSection">
-            <h1 id="uploadTitle">Assignment Hochladen</h1>
+            <h1 id="uploadTitle">Willkommen, Verena. Du bist als Student*in eingeloggt.</h1>
             <form action="#" method="POST" enctype="multipart/form-data" id="uploadForm">
                 <input type="file" name="assignment" id="uploadInput">
                 <button type="submit">Hochladen</button>
@@ -440,6 +440,8 @@
         function updateAssignments(course) {
             if (!course) return;
 
+            const uploadTitle = document.getElementById("uploadTitle");
+            uploadTitle.textContent = "Assignment Hochladen";
             // Alte Assignments entfernen
             assignmentsList.innerHTML = "";
 

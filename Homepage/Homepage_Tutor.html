@@ -6,6 +6,49 @@
     <title>Tutoren-Homepage</title>
     <style>
         /* Allgemeine Stile */
+
+                /* Upload Section */
+        .upload-section {
+            flex: 2;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .upload-section h1 {
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+
+        .message-board textarea {
+          width: 100%;
+          height: 50px;
+          margin-bottom: 10px;
+          padding: 10px;
+          border: 1px solid #ddd;
+          border-radius: 5px;
+          resize: none;
+          box-sizing: border-box; 
+          padding-right: 20px; 
+        }
+
+        .message-board button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .message-board button:hover {
+            background-color: #0056b3;
+        }
+        
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -168,15 +211,29 @@
         </div>  
     </header>
 
+</div>
     <div class="container">
+        <div class="upload-section" id="uploadSection">
+            <h1 id="uploadTitle">Willkommen, Verena. Du bist als Tutor*in eingeloggt.</h1>
+        </div>
         <!-- Assignments -->
         <div class="assignments" id="assignmentsSection">
             <h2>Assignments</h2>
             <ul id="assignmentsList">
                 <!-- Assignments werden dynamisch hinzugefügt -->
             </ul>
-        </div>
-        </div>        
+
+        </div>    
+    
+        <!-- Message Board -->
+        <div class="message-board">
+            <h2>Message Board</h2>
+            <div class="messages">
+                <p>Willkommen auf dem Message Board!</p>
+            </div>
+            <textarea placeholder="Nachricht verfassen..."></textarea>
+            <button>Senden</button>
+        </div>    
     </div>
 
     <script>
@@ -238,7 +295,7 @@
 
         // Avatar-Button-Funktionalität
         document.getElementById("avatarButton").addEventListener("click", function() {
-            window.location.href = `../avatar/index.html?course=${encodeURIComponent(selectedCourse)}`;
+            window.location.href = `../avatar/index_tutor.html?course=${encodeURIComponent(selectedCourse)}`;
         });
     </script>
 </body>
