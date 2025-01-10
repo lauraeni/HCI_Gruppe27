@@ -14,7 +14,7 @@ document.querySelector('.send-button').addEventListener('click', function() {
         const newMessage = document.createElement('div');
         newMessage.classList.add('message');
         newMessage.innerHTML = `
-            <div class="message-user">Verena:</div> 
+            <div class="message-user">Ich:</div> 
             <div class="message-text">${messageText}</div>
         `;
         chatWindow.appendChild(newMessage);
