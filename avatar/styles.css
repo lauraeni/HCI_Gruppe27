@@ -162,3 +162,22 @@
     color: black;
     text-align: center;
 }
+
+.home-button {
+    position: fixed; /* Fixiert den Button an der angegebenen Stelle */
+    top: 10px;       /* Abstand von der oberen Kante */
+    right: 10px;     /* Abstand von der rechten Kante */
+    background-color: #007bff;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    z-index: 1000; /* Stellt sicher, dass der Button über anderen Elementen liegt */
+}
+
+.home-button:hover {
+    background-color: #0056b3;
+}
+

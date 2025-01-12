@@ -311,6 +311,10 @@
         .avatar-button:hover {
             background-color: #45a049;
         }
+        .download-button {
+            display: block; /* Button wird unter dem Assignment angezeigt */
+        }
+
     </style>
 </head>
 <body>
@@ -485,9 +489,9 @@
         }
 
         // Event Listener für das Anklicken von Assignments
-        assignmentsList.addEventListener("click", function(event) {
+        assignmentsList.addEventListener("click", function (event) {
             const clickedElement = event.target;
-            
+
             // Überprüfen, ob auf einen Assignment-Link geklickt wurde
             if (clickedElement.tagName === "A" && clickedElement.dataset.assignment) {
                 event.preventDefault();
@@ -497,14 +501,14 @@
                 const uploadSection = document.getElementById("uploadSection");
                 const uploadTitle = document.getElementById("uploadTitle");
                 const uploadInput = document.getElementById("uploadInput");
-                const uploadButton = uploadForm.querySelector("button");
+                const uploadButton = document.getElementById("uploadForm").querySelector("button");
 
                 // Überprüfen, ob das Assignment hochgeladen werden darf
                 if (allowedUploadAssignments[selectedCourse][assignmentId]) {
                     uploadSection.style.display = "block";
                     uploadTitle.textContent = `${clickedElement.textContent} Hochladen`;
-                    
-                    // Mach den Upload-Bereich aktiv
+
+                    // Aktiviert den Upload-Bereich
                     uploadInput.disabled = false;
                     uploadButton.disabled = false;
                     uploadInput.style.display = "block";
@@ -512,22 +516,47 @@
 
                     // Event Listener für das Hochladen-Formular
                     const uploadForm = document.getElementById("uploadForm");
-                    uploadForm.onsubmit = function(e) {
+                    uploadForm.onsubmit = function (e) {
                         e.preventDefault();
 
-                        // Dateiauswahl überprüfen
-                        const uploadInput = document.getElementById("uploadInput");
+                        // Datei prüfen
                         const file = uploadInput.files[0];
                         if (!file) {
                             alert("Bitte wählen Sie eine Datei aus, bevor Sie hochladen.");
                             return;
                         }
 
-                        // Datei mit dem Assignment verbinden
+                        // Datei speichern
                         uploadedFiles[assignmentId] = file;
 
-                        // Symbol aktualisieren
+                        // Status-Symbol aktualisieren
                         document.getElementById(`status${assignmentId + 1}`).textContent = "✔️";
+
+                        // Bestehenden Download-Button entfernen, falls vorhanden
+                        const existingDownloadButton = document.querySelector(`#downloadButton${assignmentId + 1}`);
+                        if (existingDownloadButton) {
+                            existingDownloadButton.remove();
+                        }
+
+                        // Download-Button hinzufügen
+                        const downloadButton = document.createElement("button");
+                        downloadButton.textContent = "Herunterladen";
+                        downloadButton.id = `downloadButton${assignmentId + 1}`;
+                        downloadButton.classList.add("download-button");
+                        downloadButton.style.marginTop = "10px";
+
+                        // Temporäre URL für die hochgeladene Datei generieren
+                        const fileURL = URL.createObjectURL(file);
+                        downloadButton.addEventListener("click", () => {
+                            const a = document.createElement("a");
+                            a.href = fileURL;
+                            a.download = file.name;
+                            a.click();
+                        });
+
+                        // Download-Button unter dem Assignment einfügen
+                        const assignmentElement = clickedElement.parentElement;
+                        assignmentElement.appendChild(downloadButton);
 
                         alert(`Datei für ${clickedElement.textContent} erfolgreich hochgeladen.`);
                         uploadForm.reset(); // Formular zurücksetzen
@@ -536,7 +565,7 @@
                     uploadSection.style.display = "block";
                     uploadTitle.textContent = `Die Abgabefrist für "${clickedElement.textContent}" ist abgelaufen.`;
 
-                    // Verstecke den Upload-Bereich
+                    // Versteckt den Upload-Bereich
                     uploadInput.disabled = true;
                     uploadButton.disabled = true;
                     uploadInput.style.display = "none";
@@ -544,6 +573,8 @@
                 }
             }
         });
+
+
 
         // Dark Mode Toggle
         const toggleButton = document.getElementById('toggleTheme');

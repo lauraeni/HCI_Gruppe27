@@ -46,3 +46,41 @@ table th {
     font-weight: bold;
     color: #6200ea;
 }
+
+header {
+    background-color: #6200ea;
+    color: white;
+    position: relative; /* Ermöglicht absolute Positionierung der Kinder */
+    padding: 20px 0; /* Vertikales Padding für den Header */
+  }
+  
+  .header-container {
+    position: relative; /* Bezugsrahmen für absolute Positionierung */
+  }
+  
+  .centered-content {
+    position: absolute; /* Absolut im Header platziert */
+    top: 50%; /* Vertikale Mitte */
+    left: 50%; /* Horizontale Mitte */
+    transform: translate(-50%, -50%); /* Korrigiert die Verschiebung durch 'left' und 'top' */
+    text-align: center; /* Text bleibt zentriert */
+  }
+  
+  .home-button {
+    position: absolute;
+    top: 50%; /* Vertikal ausgerichtet */
+    right: 20px; /* Abstand vom rechten Rand */
+    transform: translateY(-50%); /* Vertikale Mitte ausgleichen */
+    background-color: #007bff;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+  }
+  
+  .home-button:hover {
+    background-color: #0056b3;
+  }
+  

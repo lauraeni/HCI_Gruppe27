@@ -55,15 +55,59 @@
       padding: 5px;
       border-radius: 4px;
     }
+    header {
+      background-color: #6200ea;
+      color: white;
+      position: relative; /* Ermöglicht absolute Positionierung der Kinder */
+      padding: 20px 0; /* Vertikales Padding für den Header */
+    }
+
+    .header-container {
+      position: relative; /* Bezugsrahmen für absolute Positionierung */
+    }
+
+    .centered-content {
+      position: absolute; /* Absolut im Header platziert */
+      top: 50%; /* Vertikale Mitte */
+      left: 50%; /* Horizontale Mitte */
+      transform: translate(-50%, -50%); /* Korrigiert die Verschiebung durch 'left' und 'top' */
+      text-align: center; /* Text bleibt zentriert */
+    }
+
+    .home-button {
+      position: absolute;
+      top: 50%; /* Vertikal ausgerichtet */
+      right: 20px; /* Abstand vom rechten Rand */
+      transform: translateY(-50%); /* Vertikale Mitte ausgleichen */
+      background-color: #007bff;
+      color: white;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .home-button:hover {
+      background-color: #0056b3;
+    }
+
+
+
+
   </style>
 </head>
 <body>
   <header>
-    <h1>
-      <span class="assignment-number">Assignment Nr: %d</span>
-      <span class="module-name">Modul: %s</span>
-    </h1>
+    <div class="header-container">
+      <h1>
+        <span class="assignment-number">Assignment Nr: %d</span>
+        <span class="module-name">Modul: %s</span>
+      </h1>
+      <button class="home-button" id="homeButton">Zurück zur Homepage</button>
+    </div>
   </header>
+  
   <main>
   
     <div class="filter-container">
@@ -268,6 +312,12 @@
     statusFilter.addEventListener("change", () => {
       const selectedStatus = statusFilter.value;
       updateTable(selectedStatus);
+    });
+
+    const homeButton = document.getElementById("homeButton");
+
+    homeButton.addEventListener("click", function() {
+      window.location.href = "../Homepage/Homepage_Tutor.html"; // Pfad zur Homepage anpassen
     });
   </script>
 </body>

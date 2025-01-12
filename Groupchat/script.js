@@ -24,5 +24,6 @@ document.querySelector('.send-button').addEventListener('click', function() {
 });
 document.getElementById('closeButton').addEventListener('click', function() {
     const chatContainer = document.querySelector('.chat-container');
-    chatContainer.style.display = 'none'; 
+    chatContainer.style.display = 'none';
+    window.location.href = "../Homepage/Homepage_Student.html"; 
 });

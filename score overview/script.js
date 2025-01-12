@@ -48,3 +48,9 @@ function loadPointsTable() {
 
 // Lade die Tabelle nach dem Laden der Seite
 window.onload = loadPointsTable;
+
+const homeButton = document.getElementById("homeButton");
+
+homeButton.addEventListener("click", function() {
+    window.location.href = "../Homepage/Homepage_Student.html"; // Pfad zur Homepage anpassen
+});
