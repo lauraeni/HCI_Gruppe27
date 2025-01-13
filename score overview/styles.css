@@ -5,7 +5,10 @@ body {
     background-color: #f4f4f9;
     color: #333;
 }
-
+body.dark-mode {
+  background-color: #121212;
+  color: #ffffff;
+}
 header {
     background-color: #6200ea;
     color: white;

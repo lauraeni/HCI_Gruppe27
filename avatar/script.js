@@ -55,3 +55,8 @@ const homeButton = document.getElementById("homeButton");
 homeButton.addEventListener("click", function() {
     window.location.href = "../Homepage/Homepage_Student.html"; // Pfad zur Homepage anpassen
 });
+
+const savedTheme = localStorage.getItem('theme');
+if (savedTheme === 'dark') {
+    document.body.classList.add('dark-mode');
+}

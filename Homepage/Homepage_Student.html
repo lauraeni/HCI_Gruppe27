@@ -574,15 +574,24 @@
             }
         });
 
-
+                // Funktion, um den Modus zu setzen
+        function toggleMode() {
+            const isDarkMode = document.body.classList.toggle('dark-mode');
+            // Zustand im LocalStorage speichern
+            toggleButton.textContent = document.body.classList.contains('dark-mode') ? 'Light Mode' : 'Dark Mode';
+            localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
+        }
 
         // Dark Mode Toggle
         const toggleButton = document.getElementById('toggleTheme');
-        toggleButton.addEventListener('click', () => {
-            document.body.classList.toggle('dark-mode');
-            toggleButton.textContent = document.body.classList.contains('dark-mode') ? 'Light Mode' : 'Dark Mode';
-        });
+        toggleButton.addEventListener('click',toggleMode);
 
+        // Beim Laden der Seite den gespeicherten Modus anwenden
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark') {
+            document.body.classList.add('dark-mode');
+            toggleButton.textContent = document.body.classList.contains('dark-mode') ? 'Light Mode' : 'Dark Mode';
+        }      
         // Logout-Button auswählen
         const logoutButton = document.getElementById("logoutButton");
 

@@ -91,7 +91,11 @@
     .home-button:hover {
       background-color: #0056b3;
     }
-
+    /* Dark Mode */
+    body.dark-mode {
+        background-color: #121212;
+        color: #ffffff;
+    }    
 
 
 
@@ -313,7 +317,10 @@
       const selectedStatus = statusFilter.value;
       updateTable(selectedStatus);
     });
-
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+        document.body.classList.add('dark-mode');
+    }
     const homeButton = document.getElementById("homeButton");
 
     homeButton.addEventListener("click", function() {
