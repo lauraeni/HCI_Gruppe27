@@ -589,7 +589,15 @@
         // Event Listener hinzufügen
         logoutButton.addEventListener("click", function() {
             // Weiterleitung zur Login-Seite
-            window.location.href = "../login/index.html"; 
+            const confirmLogout = confirm("Sind Sie sicher, dass Sie sich ausloggen möchten?");
+            if (confirmLogout) {
+                // Hier kannst du die Logout-Funktion ausführen, z.B. Benutzer auf eine andere Seite weiterleiten
+                window.location.href = "../login/index.html"; 
+            } else {
+                // Abbrechen des Logout-Vorgangs
+                event.preventDefault();
+            }
+            
         });
 
         // Punkteübersicht auswählen
