@@ -98,6 +98,7 @@
 
         /* Assignments */
         .assignments {
+            position: relative;
             flex: 1;
             background: white;
             padding: 20px;
@@ -144,6 +145,35 @@
 
         .assignments .group-chat-button:hover {
             background-color: #0056b3;
+        }
+
+        /* Info Button */
+        .info-button {
+            background-color: #333;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 20px;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 1000;
+            display: none; /* Standardmäßig versteckt */
+        }
+
+        /* Popup */
+        .popup {
+            display: none;
+            position: fixed;
+            bottom: 70px;
+            left: 70px;
+            background-color: white;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            z-index: 1000;
         }
 
 
@@ -259,9 +289,20 @@
 
         body.dark-mode .assignments,
         body.dark-mode .upload-section,
-        body.dark-mode .message-board {
+        body.dark-mode .message-board,
+        body.dark-mode .popup,
+        body.dark-mode .dropbtn,
+        body.dark-mode .dropdown-content {
             background: #1e1e1e;
             box-shadow: none;
+        }
+
+        body.dark-mode .dropdown-content a:hover {
+            background-color: #555;
+        }
+
+        body.dark-mode .dropbtn {
+            color: #fff; /* Weiße Schrift für den Text im Button */
         }
 
         body.dark-mode a {
@@ -353,9 +394,11 @@
             <h2>Assignments</h2>
             <ul id="assignmentsList">
                 <li>
-                    Wähle oben rechts einen Kurs aus!
+                    Wähle oben links einen Kurs aus!
                 </li>
             </ul>
+            <!-- Versteckter Info Button -->
+            <button id="infoButton" class="info-button">?</button>
         </div>
 
         <!-- Upload Section -->
@@ -378,6 +421,15 @@
         </div>
     </div>
 
+    <!-- Popup -->
+    <div id="infoPopup" class="popup">
+        <p>Hier sind einige Informationen, die beim Upload helfen könnten! <br>
+            ✔️: Das Assignment wurde bearbeitet. Eine Datei wurde hochgeladen. <br>
+            🟢: Die Bearbeitung für dieses Datei steht noch offen. Dateien können hochgeladen werden. <br>
+            ❌: Die Abgabefrist ist abgelaufen. Dateien können nicht mehr hochgeladen werden.
+        </p>
+    </div>
+
     <script>
         let selectedCourse = null;
         const pointsButton = document.querySelector('.points');
@@ -387,6 +439,8 @@
         const courseLinks = document.querySelectorAll(".dropdown-content a");
         const assignmentsSection = document.getElementById("assignmentsSection");
         const assignmentsList = document.getElementById("assignmentsList");
+
+        const infoButton = document.getElementById("infoButton");
 
         courseLinks.forEach(link => {
             link.addEventListener("click", function(event) {
@@ -401,7 +455,16 @@
 
                 // Punkteübersicht-Button anzeigen
                 pointsButton.style.display = 'block';
+
+                // Info-Button anzeigen
+                infoButton.style.display = 'block';
             });
+        });
+
+        // Event Listener für den "?" Button
+        infoButton.addEventListener('click', function() {
+            const popup = document.getElementById('infoPopup');
+            popup.style.display = popup.style.display === 'block' ? 'none' : 'block';
         });
 
         // Punkteübersicht-Button-Funktionalität
@@ -428,7 +491,7 @@
         };
 
         // Kurse mit Gruppenchat
-        const coursesWithGroupChat = ["Grundlagen der Mensch-Computer-Interaktion", "Programmieren 1"];
+        const coursesWithGroupChat = ["Grundlagen der Mensch-Computer-Interaktion", "Programmieren 1", "Theoretische Informatik", "Grundlagen Digitaler Systeme"];
 
         let uploadedFiles = {}; // Objekt zum Speichern von hochgeladenen Dateien
 
@@ -611,15 +674,7 @@
 
         // Punkteübersicht auswählen
         pointsButton.addEventListener("click", function() {
-            const confirmLogout = confirm("Sind Sie sicher, dass Sie sich ausloggen möchten?");
-            if (confirmLogout) {
-                // Hier kannst du die Logout-Funktion ausführen, z.B. Benutzer auf eine andere Seite weiterleiten
                 window.location.href = "../score overview/score.html"; 
-            } else {
-                // Abbrechen des Logout-Vorgangs
-                event.preventDefault();
-            }
-
         });
     </script>
 </body>

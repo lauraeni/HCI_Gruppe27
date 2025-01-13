@@ -39,14 +39,18 @@ document.getElementById('passwordChangeForm').addEventListener('submit', functio
 });
 
 document.querySelectorAll('.toggle-button').forEach(button => {
-    button.addEventListener('click', () => {
+    button.addEventListener('click', function() {
         const infoText = button.nextElementSibling;
 
-        if (infoText.style.display === 'none' || infoText.style.display === '') {
-            infoText.style.display = 'block';
-        } else {
-            infoText.style.display = 'none';
-        }
+        // Alle anderen Abschnitte schließen
+        document.querySelectorAll('.info-text').forEach(section => {
+            if (section !== infoText) {
+                section.style.display = 'none';
+            }
+        });
+
+        // Aktuellen Abschnitt umschalten
+        infoText.style.display = infoText.style.display === 'block' ? 'none' : 'block';
     });
 });
 
