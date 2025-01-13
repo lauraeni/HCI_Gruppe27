@@ -55,6 +55,7 @@
             padding: 0;
             background-color: #f9f9fb;
             color: #333;
+            transition: background-color 0.3s, color 0.3s;
         }
 
         header {
@@ -126,6 +127,41 @@
             display: block;
         }
 
+        /* Einstellungs-Button */
+        .settings {
+            margin-left: auto;
+        }
+
+        .settings button {
+            background-color: #333;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .settings button:hover {
+            background-color: #555;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #ffffff;
+        }
+
+        body.dark-mode .assignments,
+        body.dark-mode .upload-section,
+        body.dark-mode .message-board {
+            background: #1e1e1e;
+            box-shadow: none;
+        }
+
+        body.dark-mode a {
+            color: #bb86fc;
+        }        
         .avatar {
             display: flex;
             justify-content: center;
@@ -204,6 +240,10 @@
                 </div>
             </div>
             <button class="logout-button" id="logoutButton">Logout</button>
+        </div>
+        <!-- Einstellungs-Button -->
+        <div class="settings">
+            <button id="toggleTheme">Dark Mode</button>
         </div>
         <!-- Avatar-Button -->
         <div class="Avatar">
@@ -286,6 +326,13 @@
             // Assignments-Section sichtbar machen
             assignmentsSection.style.display = "block";
         }
+
+        // Dark Mode Toggle
+        const toggleButton = document.getElementById('toggleTheme');
+        toggleButton.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            toggleButton.textContent = document.body.classList.contains('dark-mode') ? 'Light Mode' : 'Dark Mode';
+        });
 
         // Logout-Button überwachen
         const logoutButton = document.getElementById("logoutButton");
